@@ -7,6 +7,21 @@ class CardList extends React.Component {
         this.props.dispatch(fetchCards());
     }
 
+    fromPile = () => {
+        const { cards } = this.props;
+        console.log("cards :", cards);
+
+        let botCards = cards.map(card => {
+            return (
+                <div key={card.code}>
+                    <img src={card.images.png} alt="card" />
+                </div>
+            );
+        });
+
+        this.setState({ cards: botCards });
+    };
+
     render() {
         const { error, loading, cards } = this.props;
 
@@ -23,9 +38,16 @@ class CardList extends React.Component {
                 {cards.map(card => (
                     <div key={card.code}>
                         <img src={card.images.png} alt="card" />
+
+                        <br />
+                        <button onClick={this.fromPile}>Prochain tour</button>
                     </div>
                 ))}
             </div>
+            // <div>
+            //     {this.props.cards}
+            //     <button onClick={this.fromPile}>Prochain tour</button>
+            // </div>
         );
     }
 }

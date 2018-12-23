@@ -3,24 +3,21 @@ import { connect } from "react-redux";
 import { fetchCards } from "./cardActions";
 
 class CardList extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleRefreshClick = this.handleRefreshClick.bind(this);
+    }
+
     componentDidMount() {
         this.props.dispatch(fetchCards());
     }
 
-    fromPile = () => {
-        const { cards } = this.props;
-        console.log("cards :", cards);
+    handleRefreshClick(e) {
+        e.preventDefault();
 
-        let botCards = cards.map(card => {
-            return (
-                <div key={card.code}>
-                    <img src={card.images.png} alt="card" />
-                </div>
-            );
-        });
-
-        this.setState({ cards: botCards });
-    };
+        const { dispatch } = this.props;
+        dispatch(fetchCards());
+    }
 
     render() {
         const { error, loading, cards } = this.props;
@@ -40,14 +37,12 @@ class CardList extends React.Component {
                         <img src={card.images.png} alt="card" />
 
                         <br />
-                        <button onClick={this.fromPile}>Prochain tour</button>
+                        <button onClick={this.handleRefreshClick}>
+                            Prochain tour
+                        </button>
                     </div>
                 ))}
             </div>
-            // <div>
-            //     {this.props.cards}
-            //     <button onClick={this.fromPile}>Prochain tour</button>
-            // </div>
         );
     }
 }

@@ -33,7 +33,7 @@ function getCards() {
                 // Create Adding to player pile
                 fetch(
                     "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/add/?cards=" +
-                        playersCardsString
+                    playersCardsString
                 )
                     .then(handleErrors)
                     .then(results => {
@@ -46,7 +46,7 @@ function getCards() {
                 // Create Adding to bot pile
                 fetch(
                     "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/add/?cards=" +
-                        botsCardsString
+                    botsCardsString
                 )
                     .then(handleErrors)
                     .then(results => {
@@ -70,15 +70,25 @@ function getCards() {
     );
 }
 
-function drawPlayerPile() {
-    return fetch(
-        "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/draw/?count=1"
-    )
-        .then(results => {
-            return results.json();
+function drawPiles() {
+    // return fetch("https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/draw/?count=1"),
+    //     fetch("https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/draw/?count=1")
+    //         .then(results => {
+    //             return results.json();
+    //         })
+    //         .then(data => {
+    //             console.log("data :", data);
+    //             return data;
+    //         });
+    return Promise.all([
+        fetch('https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/draw/?count=1'),
+        fetch('https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/draw/?count=1')
+    ])
+        .then(([res1, res2]) => {
+            return Promise.all([res1.json(), res2.json()]);
         })
-        .then(data => {
-            return data;
+        .then(([data1, data2]) => {
+            return [data1, data2];
         });
 }
 
@@ -86,10 +96,10 @@ export function fetchCards() {
     return dispatch => {
         dispatch(fetchCardsBegin());
         getCards();
-        return drawPlayerPile()
+        return drawPiles()
             .then(json => {
-                dispatch(fetchCardsSuccess(json.cards));
-                return json.cards;
+                dispatch(fetchCardsSuccess(json));
+                return json;
             })
             .catch(error => dispatch(fetchCardsFailure(error)));
     };

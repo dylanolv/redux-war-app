@@ -32,16 +32,12 @@ class CardList extends React.Component {
 
         return (
             <div>
-                {cards.map(card => (
-                    <div key={card.code}>
-                        <img src={card.images.png} alt="card" />
-
-                        <br />
-                        <button onClick={this.handleRefreshClick}>
-                            Prochain tour
-                        </button>
+                {cards.map((card, index) => (
+                    <div key={index}>
+                        <img src={card.cards[0].images.png} alt="card" />
                     </div>
                 ))}
+                <button onClick={this.handleRefreshClick}>Prochain tour</button>
             </div>
         );
     }

@@ -1,0 +1,13 @@
+.container {
+    width: 50%;
+}
+
+.card {
+    float: left;
+    padding: 10px;
+}
+
+.myButton {
+    width: 50%;
+    margin: auto;
+}

@@ -33,7 +33,7 @@ function getCards() {
                 // Create Adding to player pile
                 fetch(
                     "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/add/?cards=" +
-                    playersCardsString
+                        playersCardsString
                 )
                     .then(handleErrors)
                     .then(results => {
@@ -46,7 +46,7 @@ function getCards() {
                 // Create Adding to bot pile
                 fetch(
                     "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/add/?cards=" +
-                    botsCardsString
+                        botsCardsString
                 )
                     .then(handleErrors)
                     .then(results => {
@@ -81,13 +81,21 @@ function drawPiles() {
     //             return data;
     //         });
     return Promise.all([
-        fetch('https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/draw/?count=1'),
-        fetch('https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/draw/?count=1')
+        fetch(
+            "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/draw/?count=1"
+        ),
+        fetch(
+            "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/draw/?count=1"
+        )
     ])
         .then(([res1, res2]) => {
             return Promise.all([res1.json(), res2.json()]);
         })
         .then(([data1, data2]) => {
+            data1.cards[0].namePile = "Carte du joueur";
+            data2.cards[0].namePile = "Carte du bot";
+            console.log(data1);
+            console.log(data2);
             return [data1, data2];
         });
 }

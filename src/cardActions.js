@@ -33,7 +33,7 @@ function getCards() {
                 // Create Adding to player pile
                 fetch(
                     "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/add/?cards=" +
-                        playersCardsString
+                    playersCardsString
                 )
                     .then(handleErrors)
                     .then(results => {
@@ -46,7 +46,7 @@ function getCards() {
                 // Create Adding to bot pile
                 fetch(
                     "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/add/?cards=" +
-                        botsCardsString
+                    botsCardsString
                 )
                     .then(handleErrors)
                     .then(results => {

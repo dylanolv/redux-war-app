@@ -31,17 +31,17 @@ class CardList extends React.Component {
         }
 
         return (
-            <div class="container">
+            <div className="container">
                 <h1>Bataille</h1>
 
                 {cards.map((card, index) => (
-                    <div class="card" key={index}>
+                    <div className="card" key={index}>
                         <h2 key={index}>{card.cards[0].namePile}</h2>
                         <img src={card.cards[0].images.png} alt="card" />
                     </div>
                 ))}
 
-                <div class="myButton">
+                <div className="myButton">
                     <button onClick={this.handleRefreshClick}>
                         Prochain tour
                     </button>

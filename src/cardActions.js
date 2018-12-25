@@ -1,8 +1,3 @@
-import React from "react";
-
-let playerPile = "";
-let botPile = "";
-
 function getCards() {
     return (
         fetch("https://deckofcardsapi.com/api/deck/9td6jw4agj8o/shuffle/"),
@@ -19,21 +14,21 @@ function getCards() {
                 // Make string with player cards code for fetch API
                 let playerCardsArray = [];
                 playerDeck.map(card => {
-                    playerCardsArray.push(card.code);
+                    return playerCardsArray.push(card.code);
                 });
                 let playersCardsString = playerCardsArray.join(",");
 
                 // Same for bot cards
                 let botCardsArray = [];
                 botDeck.map(card => {
-                    botCardsArray.push(card.code);
+                    return botCardsArray.push(card.code);
                 });
                 let botsCardsString = botCardsArray.join(",");
 
                 // Create Adding to player pile
                 fetch(
                     "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/add/?cards=" +
-                    playersCardsString
+                        playersCardsString
                 )
                     .then(handleErrors)
                     .then(results => {
@@ -46,7 +41,7 @@ function getCards() {
                 // Create Adding to bot pile
                 fetch(
                     "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/add/?cards=" +
-                    botsCardsString
+                        botsCardsString
                 )
                     .then(handleErrors)
                     .then(results => {

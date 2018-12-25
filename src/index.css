@@ -4,10 +4,15 @@
 
 .card {
     float: left;
-    padding: 10px;
+    padding: 5px;
 }
 
 .myButton {
     width: 50%;
     margin: auto;
+}
+
+h2 {
+    color: green;
+    text-transform: uppercase;
 }

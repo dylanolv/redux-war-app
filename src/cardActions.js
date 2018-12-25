@@ -25,7 +25,7 @@ function getCards() {
                 });
                 let botsCardsString = botCardsArray.join(",");
 
-                // Create Adding to player pile
+                // Create =Adding to player pile
                 fetch(
                     "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/add/?cards=" +
                         playersCardsString
@@ -54,6 +54,17 @@ function getCards() {
                 // Listing player pile
                 fetch(
                     "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/list/"
+                )
+                    .then(results => {
+                        return results.json();
+                    })
+                    .then(data => {
+                        return data;
+                    });
+
+                // Listing bot pile
+                fetch(
+                    "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/list/"
                 )
                     .then(results => {
                         return results.json();
@@ -118,22 +129,19 @@ function drawPiles() {
                     "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/add/?cards=" +
                         cardToWinner
                 );
-                data1.cards[0].Status = "Winner";
-                console.log("Player wins the turn");
+                data1.cards[0].status = "Le joueur gagne le tour";
+                data1.cards[0].infos = "Le joueur récupère les deux cartes";
             } else if (indexOfActualCardBot > indexOfActualCardPlayer) {
                 fetch(
                     "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/add/?cards=" +
                         cardToWinner
                 );
-                data2.cards[0].Status = "Winner";
-                console.log("Bot wins the turn");
+                data2.cards[0].status = "Le bot gagne le tour";
+                data2.cards[0].infos = "Le bot récupère les deux cartes";
             } else {
-                data1.cards[0].Status = "Equality";
-                data2.cards[0].Status = "Equality";
-                console.log("Equality");
+                data1.cards[0].status = "Egalité pour ce tour";
+                data1.cards[0].infos = "Les deux cartes sortent du jeu";
             }
-
-            console.log(data1, data2);
 
             return [data1, data2];
         });

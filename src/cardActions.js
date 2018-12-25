@@ -28,7 +28,7 @@ function getCards() {
                 // Create Adding to player pile
                 fetch(
                     "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/add/?cards=" +
-                        playersCardsString
+                    playersCardsString
                 )
                     .then(handleErrors)
                     .then(results => {
@@ -41,7 +41,7 @@ function getCards() {
                 // Create Adding to bot pile
                 fetch(
                     "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/add/?cards=" +
-                        botsCardsString
+                    botsCardsString
                 )
                     .then(handleErrors)
                     .then(results => {
@@ -65,7 +65,7 @@ function getCards() {
     );
 }
 
-function drawPiles() {
+function drawCards() {
     // return fetch("https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/draw/?count=1"),
     //     fetch("https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/draw/?count=1")
     //         .then(results => {
@@ -89,19 +89,49 @@ function drawPiles() {
         .then(([data1, data2]) => {
             data1.cards[0].namePile = "Carte du joueur";
             data2.cards[0].namePile = "Carte du bot";
-            console.log(data1);
-            console.log(data2);
+            // console.log(data1);
+            // console.log(data2);
             return [data1, data2];
         });
+}
+
+function compareCards(playerCard, botCard) {
+    if (playerCard > botCard) {
+        (
+            fetch("https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/add/?cards=" + botCard)
+        )
+            .then(results => {
+                return results.json();
+            })
+            .then((data) => {
+                return data;
+            });
+    } else if (playerCard === botCard) {
+        console.log("BATAILLE");
+    } else {
+        (
+            fetch("https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/add/?cards=" + playerCard)
+        )
+            .then(results => {
+                // return Promise.all(results.json());
+                return results.json();
+            })
+            .then((data) => {
+                return data;
+            });
+    }
 }
 
 export function fetchCards() {
     return dispatch => {
         dispatch(fetchCardsBegin());
         getCards();
-        return drawPiles()
+        return drawCards()
             .then(json => {
+                console.log("json :", json);
                 dispatch(fetchCardsSuccess(json));
+
+                compareCards(json[0].cards[0].value, json[1].cards[0].value);
                 return json;
             })
             .catch(error => dispatch(fetchCardsFailure(error)));

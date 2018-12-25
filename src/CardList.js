@@ -34,9 +34,10 @@ class CardList extends React.Component {
             <div className="container">
                 <h1>Bataille</h1>
 
-                {cards.map((card, index) => (
+                {cards.map((card, index, index2) => (
                     <div className="card" key={index}>
                         <h2 key={index}>{card.cards[0].namePile}</h2>
+                        <h3 key={index2}>{card.cards[0].status}</h3>
                         <img src={card.cards[0].images.png} alt="card" />
                     </div>
                 ))}

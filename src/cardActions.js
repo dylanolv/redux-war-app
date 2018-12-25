@@ -66,15 +66,6 @@ function getCards() {
 }
 
 function drawPiles() {
-    // return fetch("https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/draw/?count=1"),
-    //     fetch("https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/draw/?count=1")
-    //         .then(results => {
-    //             return results.json();
-    //         })
-    //         .then(data => {
-    //             console.log("data :", data);
-    //             return data;
-    //         });
     return Promise.all([
         fetch(
             "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/draw/?count=1"
@@ -89,8 +80,61 @@ function drawPiles() {
         .then(([data1, data2]) => {
             data1.cards[0].namePile = "Carte du joueur";
             data2.cards[0].namePile = "Carte du bot";
-            console.log(data1);
-            console.log(data2);
+
+            // Tab of cards in order to check who wins
+            let orderCards = [
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "0",
+                "J",
+                "Q",
+                "K",
+                "A"
+            ];
+
+            // First letter or number of the code of the actual card of the bot and the player to compare with the tab
+            let actualCardPlayer = data1.cards[0].code.charAt(0);
+            let actualCardBot = data2.cards[0].code.charAt(0);
+
+            // Index in the tab of cards of the actual card of the bot and the player
+            let indexOfActualCardPlayer = orderCards.indexOf(
+                actualCardPlayer,
+                0
+            );
+            let indexOfActualCardBot = orderCards.indexOf(actualCardBot, 0);
+
+            // String of cards to add to the pile of the winner
+            let cardToWinner = data1.cards[0].code + "," + data2.cards[0].code;
+
+            // Compare the index of the player card with the bot card, if the index is higher it wins and add the two cards to the winner
+            if (indexOfActualCardPlayer > indexOfActualCardBot) {
+                fetch(
+                    "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/add/?cards=" +
+                        cardToWinner
+                );
+                data1.cards[0].Status = "Winner";
+                console.log("Player wins the turn");
+            } else if (indexOfActualCardBot > indexOfActualCardPlayer) {
+                fetch(
+                    "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/add/?cards=" +
+                        cardToWinner
+                );
+                data2.cards[0].Status = "Winner";
+                console.log("Bot wins the turn");
+            } else {
+                data1.cards[0].Status = "Equality";
+                data2.cards[0].Status = "Equality";
+                console.log("Equality");
+            }
+
+            console.log(data1, data2);
+
             return [data1, data2];
         });
 }

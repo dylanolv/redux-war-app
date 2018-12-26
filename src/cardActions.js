@@ -120,23 +120,28 @@ function drawPiles() {
             let cardToWinner = data1.cards[0].code + "," + data2.cards[0].code;
 
             // Compare the index of the player card with the bot card, if the index is higher it wins and add the two cards to the winner
-            if (indexOfActualCardPlayer > indexOfActualCardBot) {
-                fetch(
-                    "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/add/?cards=" +
-                        cardToWinner
-                );
-                data1.cards[0].status =
-                    "Vous gagnez le tour et récupérez les deux cartes";
-            } else if (indexOfActualCardBot > indexOfActualCardPlayer) {
-                fetch(
-                    "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/add/?cards=" +
-                        cardToWinner
-                );
-                data2.cards[0].status =
-                    "Le bot gagne le tour et récupère les deux cartes";
+
+            if (data1.cards !== "undefined" && data2.cards !== "undefined") {
+                if (indexOfActualCardPlayer > indexOfActualCardBot) {
+                    fetch(
+                        "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/add/?cards=" +
+                            cardToWinner
+                    );
+                    data1.cards[0].status =
+                        "Vous gagnez le tour et récupérez les deux cartes";
+                } else if (indexOfActualCardBot > indexOfActualCardPlayer) {
+                    fetch(
+                        "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/add/?cards=" +
+                            cardToWinner
+                    );
+                    data2.cards[0].status =
+                        "Le bot gagne le tour et récupère les deux cartes";
+                } else {
+                    data1.cards[0].status =
+                        "Egalité pour ce tour, les deux cartes sortent du jeu";
+                }
             } else {
-                data1.cards[0].status =
-                    "Egalité pour ce tour, les deux cartes sortent du jeu";
+                alert("Fin du jeu");
             }
 
             return [data1, data2];

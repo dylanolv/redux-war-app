@@ -50,28 +50,6 @@ function getCards() {
                     .then(data => {
                         return data;
                     });
-
-                // Listing player pile
-                fetch(
-                    "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/list/"
-                )
-                    .then(results => {
-                        return results.json();
-                    })
-                    .then(data => {
-                        return data;
-                    });
-
-                // Listing bot pile
-                fetch(
-                    "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/list/"
-                )
-                    .then(results => {
-                        return results.json();
-                    })
-                    .then(data => {
-                        return data;
-                    });
             })
     );
 }
@@ -83,14 +61,32 @@ function drawPiles() {
         ),
         fetch(
             "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/draw/?count=1"
+        ),
+        fetch(
+            "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/list/"
+        ),
+        fetch(
+            "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/list/"
         )
     ])
-        .then(([res1, res2]) => {
-            return Promise.all([res1.json(), res2.json()]);
+        .then(([res1, res2, res3, res4]) => {
+            return Promise.all([
+                res1.json(),
+                res2.json(),
+                res3.json(),
+                res4.json()
+            ]);
         })
-        .then(([data1, data2]) => {
-            data1.cards[0].namePile = "Carte du joueur";
+        .then(([data1, data2, data3, data4]) => {
+            //On passe dans le json le nom de la pile
+            data1.cards[0].namePile = "Votre carte";
             data2.cards[0].namePile = "Carte du bot";
+
+            // On passe dans le json le nombre de cartes qu'il lui reste
+            data1.cards[0].reminingCards =
+                "Il vous reste " + data3.piles.playerPile.remaining + " cartes";
+            data2.cards[0].reminingCards =
+                "Il reste " + data4.piles.botPile.remaining + " cartes au bot";
 
             // Tab of cards in order to check who wins
             let orderCards = [
@@ -129,18 +125,18 @@ function drawPiles() {
                     "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/add/?cards=" +
                         cardToWinner
                 );
-                data1.cards[0].status = "Le joueur gagne le tour";
-                data1.cards[0].infos = "Le joueur récupère les deux cartes";
+                data1.cards[0].status =
+                    "Vous gagnez le tour et récupérez les deux cartes";
             } else if (indexOfActualCardBot > indexOfActualCardPlayer) {
                 fetch(
                     "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/add/?cards=" +
                         cardToWinner
                 );
-                data2.cards[0].status = "Le bot gagne le tour";
-                data2.cards[0].infos = "Le bot récupère les deux cartes";
+                data2.cards[0].status =
+                    "Le bot gagne le tour et récupère les deux cartes";
             } else {
-                data1.cards[0].status = "Egalité pour ce tour";
-                data1.cards[0].infos = "Les deux cartes sortent du jeu";
+                data1.cards[0].status =
+                    "Egalité pour ce tour, les deux cartes sortent du jeu";
             }
 
             return [data1, data2];
@@ -150,7 +146,13 @@ function drawPiles() {
 export function fetchCards() {
     return dispatch => {
         dispatch(fetchCardsBegin());
-        getCards();
+        getCards().catch(error => dispatch(fetchCardsFailure(error)));
+    };
+}
+
+export function drawCards() {
+    return dispatch => {
+        dispatch(fetchCardsBegin());
         return drawPiles()
             .then(json => {
                 dispatch(fetchCardsSuccess(json));

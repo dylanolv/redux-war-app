@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { fetchCards } from "./cardActions";
+import { fetchCards, drawCards } from "./cardActions";
 
 class CardList extends React.Component {
     constructor(props) {
@@ -10,13 +10,14 @@ class CardList extends React.Component {
 
     componentDidMount() {
         this.props.dispatch(fetchCards());
+        this.props.dispatch(drawCards());
     }
 
     handleRefreshClick(e) {
         e.preventDefault();
 
         const { dispatch } = this.props;
-        dispatch(fetchCards());
+        dispatch(drawCards());
     }
 
     render() {
@@ -39,14 +40,15 @@ class CardList extends React.Component {
                 ))}
 
                 {cards.map((card, index) => (
-                    <h3 key={card.cards[0].infos}>{card.cards[0].infos}</h3>
-                ))}
-
-                {cards.map((card, index) => (
                     <div className="card" key={index}>
-                        <h4 key={card.cards[0].namePile}>
+                        <h3 key={card.cards[0].namePile}>
                             {card.cards[0].namePile}
+                        </h3>
+
+                        <h4 key={card.cards[0].reminingCards}>
+                            {card.cards[0].reminingCards}
                         </h4>
+
                         <img src={card.cards[0].images.png} alt="card" />
                     </div>
                 ))}

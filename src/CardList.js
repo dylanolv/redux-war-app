@@ -35,8 +35,8 @@ class CardList extends React.Component {
             <div className="container">
                 <h1>Bataille</h1>
 
-                {cards.map(card => (
-                    <h2 key={card.cards[0].status}>{card.cards[0].status}</h2>
+                {cards.map((card, index) => (
+                    <h2 key={index}>{card.cards[0].status}</h2>
                 ))}
 
                 {cards.map((card, index) => (

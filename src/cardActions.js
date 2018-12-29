@@ -1,7 +1,7 @@
 function getCards() {
     return (
-        fetch("https://deckofcardsapi.com/api/deck/9td6jw4agj8o/shuffle/"),
-        fetch("https://deckofcardsapi.com/api/deck/9td6jw4agj8o/draw/?count=52")
+        fetch("https://deckofcardsapi.com/api/deck/vdyg2ij0nibr/shuffle/"),
+        fetch("https://deckofcardsapi.com/api/deck/vdyg2ij0nibr/draw/?count=52")
             .then(handleErrors)
             .then(res => {
                 return res.json();
@@ -27,7 +27,7 @@ function getCards() {
 
                 // Create =Adding to player pile
                 fetch(
-                    "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/add/?cards=" +
+                    "https://deckofcardsapi.com/api/deck/vdyg2ij0nibr/pile/playerPile/add/?cards=" +
                         playersCardsString
                 )
                     .then(handleErrors)
@@ -40,7 +40,7 @@ function getCards() {
 
                 // Create Adding to bot pile
                 fetch(
-                    "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/add/?cards=" +
+                    "https://deckofcardsapi.com/api/deck/vdyg2ij0nibr/pile/botPile/add/?cards=" +
                         botsCardsString
                 )
                     .then(handleErrors)
@@ -57,16 +57,16 @@ function getCards() {
 function drawPiles() {
     return Promise.all([
         fetch(
-            "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/draw/?count=1"
+            "https://deckofcardsapi.com/api/deck/vdyg2ij0nibr/pile/playerPile/draw/?count=1"
         ),
         fetch(
-            "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/draw/?count=1"
+            "https://deckofcardsapi.com/api/deck/vdyg2ij0nibr/pile/botPile/draw/?count=1"
         ),
         fetch(
-            "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/list/"
+            "https://deckofcardsapi.com/api/deck/vdyg2ij0nibr/pile/playerPile/list/"
         ),
         fetch(
-            "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/list/"
+            "https://deckofcardsapi.com/api/deck/vdyg2ij0nibr/pile/botPile/list/"
         )
     ])
         .then(([res1, res2, res3, res4]) => {
@@ -78,11 +78,11 @@ function drawPiles() {
             ]);
         })
         .then(([data1, data2, data3, data4]) => {
-            //On passe dans le json le nom de la pile
+            // Put inside the json the name of the pile
             data1.cards[0].namePile = "Votre carte";
             data2.cards[0].namePile = "Carte du bot";
 
-            // On passe dans le json le nombre de cartes qu'il lui reste
+            // Put inside the json the number of cards remaining
             data1.cards[0].reminingCards =
                 "Il vous reste " + data3.piles.playerPile.remaining + " cartes";
             data2.cards[0].reminingCards =
@@ -120,28 +120,23 @@ function drawPiles() {
             let cardToWinner = data1.cards[0].code + "," + data2.cards[0].code;
 
             // Compare the index of the player card with the bot card, if the index is higher it wins and add the two cards to the winner
-
-            if (data1.cards !== "undefined" && data2.cards !== "undefined") {
-                if (indexOfActualCardPlayer > indexOfActualCardBot) {
-                    fetch(
-                        "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/playerPile/add/?cards=" +
-                            cardToWinner
-                    );
-                    data1.cards[0].status =
-                        "Vous gagnez le tour et récupérez les deux cartes";
-                } else if (indexOfActualCardBot > indexOfActualCardPlayer) {
-                    fetch(
-                        "https://deckofcardsapi.com/api/deck/9td6jw4agj8o/pile/botPile/add/?cards=" +
-                            cardToWinner
-                    );
-                    data2.cards[0].status =
-                        "Le bot gagne le tour et récupère les deux cartes";
-                } else {
-                    data1.cards[0].status =
-                        "Egalité pour ce tour, les deux cartes sortent du jeu";
-                }
+            if (indexOfActualCardPlayer > indexOfActualCardBot) {
+                fetch(
+                    "https://deckofcardsapi.com/api/deck/vdyg2ij0nibr/pile/playerPile/add/?cards=" +
+                        cardToWinner
+                );
+                data1.cards[0].status =
+                    "Vous gagnez le tour et récupérez les deux cartes";
+            } else if (indexOfActualCardBot > indexOfActualCardPlayer) {
+                fetch(
+                    "https://deckofcardsapi.com/api/deck/vdyg2ij0nibr/pile/botPile/add/?cards=" +
+                        cardToWinner
+                );
+                data2.cards[0].status =
+                    "Le bot gagne le tour et récupère les deux cartes";
             } else {
-                alert("Fin du jeu");
+                data1.cards[0].status =
+                    "Egalité pour ce tour, les deux cartes sortent du jeu";
             }
 
             return [data1, data2];

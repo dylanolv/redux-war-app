@@ -21,15 +21,16 @@ class CardList extends React.Component {
     }
 
     render() {
-        const { error, loading, cards } = this.props;
+        // const { error, loading, cards } = this.props;
+        const { error, cards } = this.props;
 
         if (error) {
-            return <div>Error! {error.message}</div>;
+            return <div>Erreur! {error.message}</div>;
         }
 
-        if (loading) {
-            return <div>Loading...</div>;
-        }
+        // if (loading) {
+        //     return <div>Chargement...</div>;
+        // }
 
         return (
             <div className="container">

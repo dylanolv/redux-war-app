@@ -57,10 +57,10 @@ function getCards() {
 function drawPiles() {
     return Promise.all([
         fetch(
-            "https://deckofcardsapi.com/api/deck/vdyg2ij0nibr/pile/playerPile/draw/?count=1"
+            "https://deckofcardsapi.com/api/deck/vdyg2ij0nibr/pile/playerPile/draw/bottom/?count=1"
         ),
         fetch(
-            "https://deckofcardsapi.com/api/deck/vdyg2ij0nibr/pile/botPile/draw/?count=1"
+            "https://deckofcardsapi.com/api/deck/vdyg2ij0nibr/pile/botPile/draw/bottom/?count=1"
         ),
         fetch(
             "https://deckofcardsapi.com/api/deck/vdyg2ij0nibr/pile/playerPile/list/"

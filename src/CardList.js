@@ -21,16 +21,15 @@ class CardList extends React.Component {
     }
 
     render() {
-        // const { error, loading, cards } = this.props;
-        const { error, cards } = this.props;
+        const { error, loading, cards } = this.props;
 
         if (error) {
             return <div>Erreur! {error.message}</div>;
         }
 
-        // if (loading) {
-        //     return <div>Chargement...</div>;
-        // }
+        if (loading) {
+            return <div>Chargement...</div>;
+        }
 
         return (
             <div className="container">
@@ -50,7 +49,10 @@ class CardList extends React.Component {
                             {card.cards[0].reminingCards}
                         </h4>
 
-                        <img src={card.cards[0].images.png} alt="card" />
+                        <img
+                            src={card.cards[0].images.png}
+                            alt={card.cards[0].code}
+                        />
                     </div>
                 ))}
 
